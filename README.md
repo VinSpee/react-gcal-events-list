@@ -4,9 +4,9 @@ See it in action on [The Runnin' Kind's site](http://therunninkind.com).
 
 ## Getting started:
 
-	* `npm install`
-	* `npm start` (will watch files for changes)
-	* Then open `index.html` in your browser. Edit `index.jsx` to make changes.
+- `npm install`
+- `npm start` (will watch files for changes)
+- open `index.html` in your browser. Edit `index.jsx` to make changes.
 
 ## Setting it up w/ your calendar
 
