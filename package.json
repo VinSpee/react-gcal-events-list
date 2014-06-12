@@ -1,8 +1,7 @@
 {
-  "name": "react-browserify-template",
-  "version": "0.0.1",
+  "name": "react-google-calendar-events-list",
   "description": "Quick boilerplate for browserify and React modules.",
-  "main": "index.js",
+  "main": "index.jsx",
   "dependencies": {
     "react": "~0.8"
   },
