@@ -1,7 +1,7 @@
 {
   "name": "react-google-calendar-events-list",
-  "description": "Quick boilerplate for browserify and React modules.",
-  "main": "index.jsx",
+  "description": "Reusable ReactJS component for rendering a list of events from a google calendar.",
+  "main": "index.js",
   "dependencies": {
     "react": "~0.8"
   },
@@ -20,8 +20,8 @@
     "collect-static": "collect-static . ./static",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Pete Hunt",
-  "license": "Apache 2",
+  "author": "Vince Speelman",
+  "license": "MIT",
   "browserify": {
     "transform": [
       "reactify",
