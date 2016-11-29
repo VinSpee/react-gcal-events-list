@@ -1,7 +1,5 @@
 # React Google Calendar Events List
 
-See it in action on [The Runnin' Kind's site](http://therunninkind.com).
-
 ## Getting started:
 
 - `npm install`
