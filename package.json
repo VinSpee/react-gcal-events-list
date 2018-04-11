@@ -1,6 +1,6 @@
 {
   "name": "react-google-calendar-events-list",
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0",
   "description": "Reusable ReactJS component for rendering a list of events from a google calendar.",
   "publishConfig": {
     "access": "public"
