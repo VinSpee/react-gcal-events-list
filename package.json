@@ -1,13 +1,13 @@
 {
   "name": "react-google-calendar-events-list",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "Reusable ReactJS component for rendering a list of events from a google calendar.",
   "publishConfig": {
     "access": "public"
   },
   "main": "dist/react-google-calendar-events-list.js",
-  "module": "dist/google-calendar-events-list.es.js",
-  "browser": "dist/google-calendar-events-list.min.js",
+  "module": "dist/react-google-calendar-events-list.es.js",
+  "browser": "dist/react-google-calendar-events-list.min.js",
   "scripts": {
     "build": "bili --js babel --format cjs,es,umd,umd-min --moduleName ReactShowMore --external react",
     "prebuild": "yarn test:fast && yarn lint && yarn typecheck",
