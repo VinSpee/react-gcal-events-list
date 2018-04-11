@@ -1,6 +1,6 @@
 {
   "name": "react-google-calendar-events-list",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Reusable ReactJS component for rendering a list of events from a google calendar.",
   "publishConfig": {
     "access": "public"
@@ -79,8 +79,8 @@
     "enzyme-to-json": "3.3.1",
     "eslint": "^4.9.0",
     "eslint-config-airbnb": "16.1.0",
-    "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-flowtype": "2.43.0",
+    "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
     "flow-bin": "0.65.0",
@@ -115,17 +115,46 @@
   },
   "analyzeCommits": {
     "releaseRules": [
-      {"type": "docs", "scope":"README", "release": "patch"},
-      {"type": "build", "release": "patch"},
-      {"type": "revert", "release": "patch"},
-      {"type": "refactor", "release": "patch"},
-      {"type": "style", "release": "patch"},
-      {"type": "feat", "release": "minor"},
-      {"type": "fix", "release": "patch"},
-      {"type": "perf", "release": "patch"}
+      {
+        "type": "docs",
+        "scope": "README",
+        "release": "patch"
+      },
+      {
+        "type": "build",
+        "release": "patch"
+      },
+      {
+        "type": "revert",
+        "release": "patch"
+      },
+      {
+        "type": "refactor",
+        "release": "patch"
+      },
+      {
+        "type": "style",
+        "release": "patch"
+      },
+      {
+        "type": "feat",
+        "release": "minor"
+      },
+      {
+        "type": "fix",
+        "release": "patch"
+      },
+      {
+        "type": "perf",
+        "release": "patch"
+      }
     ],
     "parserOpts": {
-      "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
+      "noteKeywords": [
+        "BREAKING CHANGE",
+        "BREAKING CHANGES",
+        "BREAKING"
+      ]
     }
   },
   "release": {
@@ -134,7 +163,10 @@
       "@semantic-release/npm",
       {
         "path": "@semantic-release/git",
-        "assets": ["package.json", "CHANGELOG.md"],
+        "assets": [
+          "package.json",
+          "CHANGELOG.md"
+        ],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
@@ -142,7 +174,10 @@
       "@semantic-release/npm",
       {
         "path": "@semantic-release/git",
-        "assets": ["package.json", "CHANGELOG.md"],
+        "assets": [
+          "package.json",
+          "CHANGELOG.md"
+        ],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ]
