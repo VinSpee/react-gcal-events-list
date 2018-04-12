@@ -101,7 +101,7 @@ var Calendar = function (_React$PureComponent) {
   inherits(Calendar, _React$PureComponent);
 
   function Calendar() {
-    var _ref;
+    var _ref4;
 
     var _temp, _this, _ret;
 
@@ -111,11 +111,20 @@ var Calendar = function (_React$PureComponent) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref4 = Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call.apply(_ref4, [this].concat(args))), _this), _this.state = {
+      loading: false,
       events: []
-    }, _this.getEvents = fetch(GET_CAL_URL(_this.props.calendarID, _this.props.apiKey)).then(function (res) {
-      return res.json();
-    }), _temp), possibleConstructorReturn(_this, _ret);
+    }, _this.getEvents = function () {
+      _this.setState(function (state) {
+        return Object.assign({}, state, {
+          events: [],
+          loading: true
+        });
+      });
+      return fetch(GET_CAL_URL(_this.props.calendarID, _this.props.apiKey)).then(function (res) {
+        return res.json();
+      });
+    }, _temp), possibleConstructorReturn(_this, _ret);
   }
 
   createClass(Calendar, [{
@@ -123,22 +132,36 @@ var Calendar = function (_React$PureComponent) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      if (this.props.calendarID && this.props.apiKey) {
-        this.getEvents.then(function (data) {
-          _this2.setState(function (state) {
-            return Object.assign({}, state, {
-              events: data.items
-            });
+      this.getEvents().then(function (data) {
+        _this2.setState(function (state) {
+          var _ref;
+
+          return Object.assign({}, state, {
+            loading: false,
+            events: (_ref = data) != null ? _ref.items : _ref
           });
         });
-        return;
-      }
-      throw new Error('please provide an API key and Calendar ID');
+      });
     }
   }, {
     key: 'render',
     value: function render() {
-      var events = this.state.events;
+      var children = this.props.children;
+      var _state = this.state,
+          _state$loading = _state.loading,
+          loading = _state$loading === undefined ? false : _state$loading,
+          _state$events = _state.events,
+          events = _state$events === undefined ? [] : _state$events;
+
+      var currentEvents = events.filter(function (event) {
+        var _ref2, _ref3;
+
+        return (((_ref2 = event) != null ? (_ref2 = _ref2.start) != null ? _ref2.dateTime : _ref2 : _ref2) || ((_ref3 = event) != null ? (_ref3 = _ref3.start) != null ? _ref3.date : _ref3 : _ref3)) > new Date().toISOString();
+      });
+
+      if (children && typeof children === 'function') {
+        return children({ events: currentEvents, loading: loading });
+      }
 
       return React.createElement(
         'div',
@@ -146,9 +169,7 @@ var Calendar = function (_React$PureComponent) {
         React.createElement(
           'dl',
           { className: 'events__list' },
-          events.filter(function (event) {
-            return (event.start.dateTime || event.start.date) > new Date().toISOString();
-          }).map(function (event) {
+          currentEvents.map(function (event) {
             return React.createElement(
               'div',
               { key: event.id, className: 'event' },

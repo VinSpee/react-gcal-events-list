@@ -1,0 +1,11 @@
+{
+  "presets": [
+    "stage-0"
+  ],
+  "plugins": [
+    "macros",
+    "transform-class-properties",
+    "flow-react-proptypes",
+    "transform-flow-strip-types"
+  ]
+}

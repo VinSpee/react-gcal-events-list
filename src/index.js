@@ -1,4 +1,6 @@
 import React from 'react';
+import type Node from 'react';
+import idx from 'idx.macro';
 
 const GET_CAL_URL = (calID, key) =>
   `https://www.googleapis.com/calendar/v3/calendars/${calID}/events?fields=items(summary,id,location,start)&key=${key}`;
@@ -26,83 +28,103 @@ const formatDate = (date) => {
   return date;
 };
 
+export type CalendarEventShape = {
+  id: string,
+  location?: string,
+  summary: string,
+  dateTime?: string,
+  date?: string,
+};
+
 export type CalendarShape = {
   calendarID: string,
   apiKey: string,
+  children: (Array<CalendarEventShape>) => Node,
 };
 
 export type CalendarStateShape = {
-  events: Array<{
-    id: string,
-    location?: string,
-    summary: string,
-    dateTime?: string,
-    date?: string,
-  }>,
+  events: Array<CalendarEventShape>,
 };
 
 class Calendar extends React.PureComponent<CalendarShape, CalendarStateShape> {
   state = {
+    loading: false,
     events: [],
   };
 
   componentDidMount() {
-    if (this.props.calendarID && this.props.apiKey) {
-      this.getEvents.then((data) => {
-        this.setState(state => ({
-          ...state,
-          events: data.items,
-        }));
-      });
-      return;
-    }
-    throw new Error('please provide an API key and Calendar ID');
+    this.getEvents().then((data) => {
+      this.setState(state => ({
+        ...state,
+        loading: false,
+        events: idx(data, _ => _.items),
+      }));
+    });
   }
 
-  getEvents = fetch(GET_CAL_URL(this.props.calendarID, this.props.apiKey)).then(
-    res => res.json(),
-  );
+  getEvents = () => {
+    this.setState(state => ({
+      ...state,
+      events: [],
+      loading: true,
+    }));
+    return fetch(GET_CAL_URL(this.props.calendarID, this.props.apiKey)).then(
+      res => res.json(),
+    );
+  };
 
   render() {
-    const { events } = this.state;
+    const { children } = this.props;
+    const { loading = false, events = [] } = this.state;
+    const currentEvents = events.filter(
+      event =>
+        (idx(event, _ => _.start.dateTime) || idx(event, _ => _.start.date)) >
+        new Date().toISOString(),
+    );
+
+    if (children && typeof children === 'function') {
+      return children({ events: currentEvents, loading });
+    }
+
     return (
       <div className="events">
         <dl className="events__list">
-          {events
-            .filter(
-              event =>
-                (event.start.dateTime || event.start.date) >
-                new Date().toISOString(),
-            )
-            .map(event => (
-              <div key={event.id} className="event">
-                <dt data-test="event-summary" className="event__title">
-                  {event.summary}
-                </dt>
-                {event.location && (
-                  <span className="event__location">
-                    <span>{event.location}</span>
+          {currentEvents.map(event => (
+            <div key={event.id} className="event">
+              <dt data-test="event-summary" className="event__title">
+                {event.summary}
+              </dt>
+              {event.location && (
+                <span className="event__location">
+                  <span>{event.location}</span>
+                </span>
+              )}
+              <dd className="event__details">
+                <time
+                  className="event__schedule"
+                  dateTime={
+                    idx(event, _ => _.start.dateTime) ||
+                    idx(event, _ => _.start.date)
+                  }
+                >
+                  <span className="event__date">
+                    {event.start.dateTime
+                      ? formatDate(
+                          idx(event, _ => _.start.dateTime.split('T')[0]),
+                        )
+                      : formatDate(idx(event, _ => _.start.date))}
                   </span>
-                )}
-                <dd className="event__details">
-                  <time
-                    className="event__schedule"
-                    dateTime={event.start.dateTime || event.start.date}
-                  >
-                    <span className="event__date">
-                      {event.start.dateTime
-                        ? formatDate(event.start.dateTime.split('T')[0])
-                        : formatDate(event.start.date)}
+                  {idx(event, _ => _.start.dateTime) && (
+                    <span className="event__time">
+                      {formatTime(
+                        idx(event, _ => _.start.dateTime.split('T')[1]),
+                      )}
                     </span>
-                    {event.start.dateTime && (
-                      <span className="event__time">
-                        {formatTime(event.start.dateTime.split('T')[1])}
-                      </span>
-                    )}
-                  </time>
-                </dd>
-              </div>
-            ))}
+                  )}
+                </time>
+              </dd>
+            </div>
+          ))}
         </dl>
       </div>
     );
