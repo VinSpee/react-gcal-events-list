@@ -18,10 +18,26 @@ import { render } from 'react-dom';
 import Calendar from 'react-google-calendar-events-list';
 
 render(
-  <Calendar
-    calendarID="en.orthodox_christianity%23holiday%40group.v.calendar.google.com"
-    apiKey="AIzaSyAunY2R4utMXaWe1uAxIRdcRsbUlI8yhL8"
-  />,
+  <React.Fragment>
+    <div>
+      <h2>Function as children</h2>
+      <Calendar
+        calendarID="en.orthodox_christianity%23holiday%40group.v.calendar.google.com"
+        apiKey="AIzaSyAunY2R4utMXaWe1uAxIRdcRsbUlI8yhL8"
+      >
+        {({ loading, events }) =>
+          loading ? <div>loading</div> : <div>{JSON.stringify(events)}</div>
+        }
+      </Calendar>
+    </div>
+    <div>
+      <h2>Default output</h2>
+      <Calendar
+        calendarID="en.orthodox_christianity%23holiday%40group.v.calendar.google.com"
+        apiKey="AIzaSyAunY2R4utMXaWe1uAxIRdcRsbUlI8yhL8"
+      />
+    </div>
+  </React.Fragment>,
   document.getElementById('root'),
 );
 ```
